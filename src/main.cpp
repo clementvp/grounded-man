@@ -6,8 +6,6 @@ void setup()
     StickCP2.begin(cfg);
 }
 
-bool manDown = false;
-
 void flashScreenAndBeep()
 {
     StickCP2.Display.fillCircle(StickCP2.Display.width() / 2, StickCP2.Display.height() / 2, 50, RED);
@@ -18,6 +16,11 @@ void flashScreenAndBeep()
 
 void loop()
 {
+    static unsigned long previousTime = 0;
+    static bool manDown = false;
+    static bool alarm = false;
+
+    unsigned long currentTime = millis();
     if (StickCP2.Imu.update())
     {
         auto data = StickCP2.Imu.getImuData();
@@ -25,6 +28,19 @@ void loop()
     }
 
     if (manDown)
+    {
+        if (!alarm && (currentTime - previousTime >= 5000))
+        {
+            alarm = true;
+        }
+    }
+    else
+    {
+        alarm = false;
+        previousTime = currentTime;
+    }
+
+    if (alarm)
     {
         flashScreenAndBeep();
     }
