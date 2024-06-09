@@ -4,6 +4,7 @@ void setup()
 {
     auto cfg = M5.config();
     StickCP2.begin(cfg);
+    StickCP2.Display.sleep();
 }
 
 void flashScreenAndBeep()
@@ -32,12 +33,17 @@ void loop()
     {
         if (!alarm && (currentTime - previousTime >= 10000))
         {
+            StickCP2.Display.wakeup();
             alarm = true;
         }
     }
     else
     {
-        alarm = false;
+        if (alarm)
+        {
+            StickCP2.Display.sleep();
+            alarm = false;
+        }
         previousTime = currentTime;
     }
 
