@@ -9,6 +9,7 @@ void setup()
 void flashScreenAndBeep()
 {
     StickCP2.Display.fillCircle(StickCP2.Display.width() / 2, StickCP2.Display.height() / 2, 50, RED);
+    StickCP2.Speaker.tone(4000, 600);
     delay(600);
     StickCP2.Display.clear();
     delay(600);
@@ -24,12 +25,12 @@ void loop()
     if (StickCP2.Imu.update())
     {
         auto data = StickCP2.Imu.getImuData();
-        manDown = abs(data.accel.y) < 0.60;
+        manDown = abs(data.accel.y) < 0.40 && abs(data.accel.x) < 0.40;
     }
 
     if (manDown)
     {
-        if (!alarm && (currentTime - previousTime >= 5000))
+        if (!alarm && (currentTime - previousTime >= 10000))
         {
             alarm = true;
         }
