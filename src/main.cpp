@@ -4,6 +4,12 @@ void setup()
 {
     auto cfg = M5.config();
     StickCP2.begin(cfg);
+    StickCP2.Display.setTextColor(WHITE);
+    StickCP2.Display.setCursor(39, 109);
+    StickCP2.Display.setFont(&fonts::Font2);
+    StickCP2.Display.setTextSize(1);
+    StickCP2.Display.print("Working");
+    delay(5000);
     StickCP2.Display.sleep();
 }
 
