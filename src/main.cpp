@@ -4,44 +4,30 @@ void setup()
 {
     auto cfg = M5.config();
     StickCP2.begin(cfg);
-    StickCP2.Display.setRotation(1);
 }
 
-bool flashed = false;
+bool manDown = false;
 
-void flashScreenAndBeep(void)
+void flashScreenAndBeep()
 {
-    delay(500);
     StickCP2.Display.fillCircle(StickCP2.Display.width() / 2, StickCP2.Display.height() / 2, 50, RED);
-    delay(500);
+    delay(600);
     StickCP2.Display.clear();
+    delay(600);
 }
 
-void loop(void)
+void loop()
 {
-    auto imu_update = StickCP2.Imu.update();
-    if (imu_update)
+    if (StickCP2.Imu.update())
     {
         auto data = StickCP2.Imu.getImuData();
-
-        if (abs(data.accel.y) < 0.60)
-        {
-            if (!flashed)
-            {
-                Serial.printf("flashed passe a true\n");
-                flashed = true;
-            }
-        }
-        else
-        {
-            Serial.printf("flashed passe a false\n");
-            flashed = false;
-        }
-
-        if (flashed)
-        {
-            flashScreenAndBeep();
-        }
+        manDown = abs(data.accel.y) < 0.60;
     }
+
+    if (manDown)
+    {
+        flashScreenAndBeep();
+    }
+
     delay(100);
 }
